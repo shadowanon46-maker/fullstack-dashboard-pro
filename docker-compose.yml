@@ -1,0 +1,22 @@
+services:
+  db:
+    image: ankane/pgvector:latest  # PostgreSQL + pgvector (officially maintained)
+    container_name: fullstack_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fullstack_dashboard
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  pgdata:  # persistensi data antar restart
+
+networks:
+  app-network:
+    driver: bridge
