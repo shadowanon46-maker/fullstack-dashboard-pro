@@ -39,3 +39,16 @@ export const auditLogs = pgTable('audit_logs', {
 });
 
 export type AuditLog = InferSelectModel<typeof auditLogs>;
+
+// Session table for storing active user sessions
+export const sessions = pgTable('sessions', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  token: text('token').notNull().unique(),
+  userAgent: text('user_agent'),
+  ip: text('ip'),
+  expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export type Session = InferSelectModel<typeof sessions>;

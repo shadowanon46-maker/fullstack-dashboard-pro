@@ -20,7 +20,11 @@ export async function POST(request: Request) {
       );
     }
 
-    await createSession(user.id);
+    // Get user agent and IP for session tracking
+    const userAgent = request.headers.get("user-agent") || undefined;
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
+
+    await createSession(user.id, userAgent, ip);
 
     return NextResponse.json({
       success: true,
