@@ -1,5 +1,5 @@
 // src/lib/db/schema.ts
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 import { InferSelectModel } from 'drizzle-orm';
 
 export const users = pgTable('users', {
@@ -8,6 +8,12 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash'),
   role: text('role').default('user'),
+  // 2FA fields
+  twoFactorSecret: text('two_factor_secret'),
+  twoFactorEnabled: boolean('two_factor_enabled').default(false),
+  // Password reset fields
+  resetToken: text('reset_token'),
+  resetTokenExpiresAt: timestamp('reset_token_expires_at'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
