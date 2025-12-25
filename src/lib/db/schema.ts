@@ -58,3 +58,26 @@ export const sessions = pgTable('sessions', {
 });
 
 export type Session = InferSelectModel<typeof sessions>;
+
+// Login attempts table for brute-force protection
+export const loginAttempts = pgTable('login_attempts', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull(),
+  ip: text('ip').notNull(),
+  attempts: integer('attempts').default(1),
+  lockedUntil: timestamp('locked_until'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export type LoginAttempt = InferSelectModel<typeof loginAttempts>;
+
+// Pending 2FA sessions for two-step login
+export const pending2FASessions = pgTable('pending_2fa_sessions', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull(),
+  token: text('token').notNull().unique(),
+  expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export type Pending2FASession = InferSelectModel<typeof pending2FASessions>;
