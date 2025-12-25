@@ -75,12 +75,24 @@ export function UserManagementClient({
     setDeletingId(null);
   };
 
+  const handleLogout = async () => {
+    const res = await fetch("/api/logout", { method: "POST" });
+    if (res.ok) {
+      window.location.href = "/login";
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-6">
-        <div>
-          <h1 className="text-3xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">Kelola pengguna sistem Anda</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">User Management</h1>
+            <p className="text-muted-foreground">Kelola pengguna sistem Anda</p>
+          </div>
+          <Button variant="outline" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
 
         <Card>
