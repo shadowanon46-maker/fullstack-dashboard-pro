@@ -37,7 +37,7 @@ export async function PUT(
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: (error as any).errors },
+        { error: "Invalid input", details: error.issues },
         { status: 400 }
       );
     }
@@ -66,7 +66,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: "User deleted" }, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to delete user" },
       { status: 500 }

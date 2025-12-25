@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const allUsers = await db.select().from(users).orderBy(users.id);
     return NextResponse.json(allUsers, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to fetch users" },
       { status: 500 }
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: (error as any).errors },
+        { error: "Invalid input", details: error.issues },
         { status: 400 }
       );
     }

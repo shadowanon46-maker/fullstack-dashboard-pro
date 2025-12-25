@@ -109,7 +109,7 @@ const MAX_ATTEMPTS = 5;
 const LOCKOUT_MINUTES = 15;
 
 // Check if login is allowed (not locked out)
-export async function checkLoginAttempts(email: string, ip: string) {
+export async function checkLoginAttempts(email: string, _ip: string) {
   const [attempt] = await db
     .select()
     .from(loginAttempts)
