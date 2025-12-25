@@ -1,6 +1,6 @@
 services:
   db:
-    image: ankane/pgvector:latest  # PostgreSQL + pgvector (officially maintained)
+    image: ankane/pgvector:latest
     container_name: fullstack_db
     restart: unless-stopped
     environment:
@@ -13,9 +13,31 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d fullstack_dashboard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fullstack_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://devuser:devpass123@db:5432/fullstack_dashboard
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
 
 volumes:
-  pgdata:  # persistensi data antar restart
+  pgdata:
 
 networks:
   app-network:
